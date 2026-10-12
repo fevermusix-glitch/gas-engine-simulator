@@ -87,3 +87,16 @@ Cloudflare Pagesで発行されたURL（HTTPS）にアクセスすると、自�
   - `/*    /index.html   200` を設定済み。ブラウザをリロードしたり別パスに遷移しても404にならずSPAとして正常に動作します。
 - **PWAヘッダー最適化 (`public/_headers`)**:
   - Service Worker (`sw.js`) とマニフェスト (`manifest.webmanifest`) のキャッシュを常に最新に保ち、アップデートが即座にユーザー端末に届くよう制御しています。
+
+---
+
+## 💡 トラブルシューティング: Cloudflare Pagesのビルドエラー対策
+
+### 「Unknown lockfile version / bun.lock」エラーが発生した場合
+Cloudflare Pagesのビルド環境が古いBun (`v1.2.15`) を使用している場合、新しいBunで生成された `bun.lock` (lockfileVersion: 2) を読み込めずエラーになります。
+
+**本リポジトリでの解決済み対応:**
+- `bun.lock` を削除し、安定した標準パッケージマネージャーである **`package-lock.json` (npm)** に統一しました。
+- これにより、Cloudflare Pagesは自動的に安定した `Node.js 20` + `npm ci` を検知してビルドを実行するため、エラーなく一発でデプロイが成功します。
+- GitHubへ最新の変更をプッシュ (`git push origin main`) するだけで、自動的に成功するようになります。
+
