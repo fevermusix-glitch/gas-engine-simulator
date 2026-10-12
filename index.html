@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <title>ガソリンエンジンシミュレーター</title>
+    <meta name="description" content="直列・V型・水平対向エンジン構造、ピストン・クランク連動3D物理挙動、熱力学解析、ヒートマップ、分解図を備えた高精度ガソリンエンジンシミュレーター" />
+    <meta property="og:title" content="ガソリンエンジンシミュレーター" />
+    <meta property="og:description" content="直列・V型・水平対向エンジン構造、ピストン・クランク連動3D物理挙動、熱力学解析、ヒートマップ、分解図を備えた高精度ガソリンエンジンシミュレーター" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="theme-color" content="#0f172a" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="エンジン3D" />
+    <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/pwa-192x192.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <style>
+      /* スマホUI完全対応: 長押しでのコンテキストメニューやテキスト選択を無効化 */
+      * {
+        -webkit-touch-callout: none !important;
+        -webkit-tap-highlight-color: transparent;
+      }
+      canvas {
+        touch-action: none;
+      }
+    </style>
+  </head>
+  <body class="bg-slate-950 text-slate-100 antialiased overflow-hidden select-none">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+

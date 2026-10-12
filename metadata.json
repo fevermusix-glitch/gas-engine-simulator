@@ -1,0 +1,6 @@
+{
+  "name": "ガソリンエンジンシミュレーター",
+  "description": "直列・V型・水平対向エンジン構造、ピストン・クランク連動3D物理挙動、熱力学解析、ヒートマップ、分解図を備えた高精度ガソリンエンジンシミュレーター",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
