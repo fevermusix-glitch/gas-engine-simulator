@@ -83,26 +83,24 @@ Cloudflare Pagesで発行されたURL（HTTPS）にアクセスすると、自�
   - `pwa-512x512.png`: スプラッシュスクリーン用高解像度アイコン
   - `pwa-maskable-512x512.png`: Androidのアダプティブアイコン（セーフゾーン余白対応）
   - `apple-touch-icon.png` (180x180): iOS Safari専用アイコン
-- **Cloudflare Pages SPA対応 (`public/_redirects`)**:
-  - `/*    /index.html   200` を設定済み。ブラウザをリロードしたり別パスに遷移しても404にならずSPAとして正常に動作します。
+- **Cloudflare SPA対応 (`wrangler.json`)**:
+  - `not_found_handling: "single-page-application"` を設定済み。ブラウザをリロードしたり別パスに遷移しても404にならずSPAとして正常に動作します。
 - **PWAヘッダー最適化 (`public/_headers`)**:
   - Service Worker (`sw.js`) とマニフェスト (`manifest.webmanifest`) のキャッシュを常に最新に保ち、アップデートが即座にユーザー端末に届くよう制御しています。
 
 ---
 
-## 💡 トラブルシューティング: Cloudflare Pagesのビルドエラー対策
+## 💡 トラブルシューティング: Cloudflare ビルド＆デプロイ対策
 
 ### 1. 「Unknown lockfile version / bun.lock」エラー
 Cloudflareのビルド環境が古いBun (`v1.2.15`) を使用している場合、新しいBunで生成された `bun.lock` (lockfileVersion: 2) を読み込めずエラーになります。
-
-**本リポジトリでの解決済み対応:**
-- `bun.lock` をGit追跡から除外し、標準の **`package-lock.json` (npm)** に統一しました。
-- これにより、Cloudflareは自動的に安定した `Node.js 20` + `npm ci` を検知して依存関係を正常にインストールします。
+- **対応:** `package-lock.json` (npm) に統一し、安定した `npm ci` でビルドするようにしました。
 
 ### 2. 「Cannot use assets with a binding in an assets-only Worker」エラー
-`wrangler deploy` 実行時に、Workerスクリプト（`main`）のない静的サイト用設定で `"binding": "ASSETS"` が指定されていると発生するWranglerのエラーです。
+`wrangler deploy` 実行時に、Workerスクリプトのない設定で `"binding": "ASSETS"` が指定されていると発生するエラーです。
+- **対応:** `wrangler.json` の `assets` から `"binding": "ASSETS"` を削除しました。
 
-**本リポジトリでの解決済み対応:**
-- `wrangler.json` の `assets` から `"binding": "ASSETS"` を削除し、SPA用の `not_found_handling: "single-page-application"` に修正しました。
-- これにより `wrangler deploy` が静的アセット（`dist/`）を正常に認識し、デプロイが完了します。
+### 3. 「Invalid _redirects configuration: Infinite loop detected」エラー (code: 100324)
+Cloudflare Workers Static Assetsでは `/* /index.html 200` を記述した `_redirects` が存在すると、Cloudflare APIが「無限ループ（URL正規化によるループ）」と検知してデプロイを拒否します。
+- **対応:** `_redirects` ファイルを削除し、Cloudflare Workers公式の `wrangler.json` による `not_found_handling: "single-page-application"` 方式に統一しました。これでエラーなくSPAルーティングが機能します。
 
