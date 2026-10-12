@@ -92,11 +92,17 @@ Cloudflare Pagesで発行されたURL（HTTPS）にアクセスすると、自�
 
 ## 💡 トラブルシューティング: Cloudflare Pagesのビルドエラー対策
 
-### 「Unknown lockfile version / bun.lock」エラーが発生した場合
-Cloudflare Pagesのビルド環境が古いBun (`v1.2.15`) を使用している場合、新しいBunで生成された `bun.lock` (lockfileVersion: 2) を読み込めずエラーになります。
+### 1. 「Unknown lockfile version / bun.lock」エラー
+Cloudflareのビルド環境が古いBun (`v1.2.15`) を使用している場合、新しいBunで生成された `bun.lock` (lockfileVersion: 2) を読み込めずエラーになります。
 
 **本リポジトリでの解決済み対応:**
-- `bun.lock` を削除し、安定した標準パッケージマネージャーである **`package-lock.json` (npm)** に統一しました。
-- これにより、Cloudflare Pagesは自動的に安定した `Node.js 20` + `npm ci` を検知してビルドを実行するため、エラーなく一発でデプロイが成功します。
-- GitHubへ最新の変更をプッシュ (`git push origin main`) するだけで、自動的に成功するようになります。
+- `bun.lock` をGit追跡から除外し、標準の **`package-lock.json` (npm)** に統一しました。
+- これにより、Cloudflareは自動的に安定した `Node.js 20` + `npm ci` を検知して依存関係を正常にインストールします。
+
+### 2. 「Cannot use assets with a binding in an assets-only Worker」エラー
+`wrangler deploy` 実行時に、Workerスクリプト（`main`）のない静的サイト用設定で `"binding": "ASSETS"` が指定されていると発生するWranglerのエラーです。
+
+**本リポジトリでの解決済み対応:**
+- `wrangler.json` の `assets` から `"binding": "ASSETS"` を削除し、SPA用の `not_found_handling: "single-page-application"` に修正しました。
+- これにより `wrangler deploy` が静的アセット（`dist/`）を正常に認識し、デプロイが完了します。
 
